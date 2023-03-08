@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   standalone: true,
-  imports: [],
+  imports: [
+    MatButtonModule
+  ],
   selector: 'poke-root',
-  template: ` <p>test</p> `,
+  template: `<button mat-raised-button color="primary">Hello World</button>`,
   styles: [],
 })
 export class AppComponent {
