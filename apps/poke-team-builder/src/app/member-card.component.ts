@@ -20,10 +20,10 @@ import {MatIconModule} from '@angular/material/icon';
                         <span class="grey">{{details.id}}</span>
                         <span>{{details.name | titlecase}}</span>
                 </mat-card-title>
-                <mat-card-subtitle class="grey">{{details | types | uppercase}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <img [src]="details.sprites.front_default" [alt]="details.name"/>
+                <p class="grey">{{details | types | uppercase}}</p>
             </mat-card-content>
             <mat-card-actions>
                 <button mat-icon-button color="accent" (click)="remove.emit(details)">
@@ -36,8 +36,21 @@ import {MatIconModule} from '@angular/material/icon';
             mat-card-title span:first-child {
                 margin-right: 10px;
             }
+            mat-card-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            mat-card-content img {
+                width: 80%;
+            }
             .grey {
                 color: #aaa
+            }
+            mat-card-actions {
+                display: flex;
+                justify-content: flex-end;
             }
         `
 
