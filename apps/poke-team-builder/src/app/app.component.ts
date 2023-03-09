@@ -10,6 +10,7 @@ import {BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observ
 import Pokemon from './models/pokemon';
 import {MemberCardComponent} from './member-card.component';
 import PokeDetails from './models/poke-details';
+import {EmptyCardComponent} from './empty-card.component';
 
 @Component({
     standalone: true,
@@ -21,6 +22,7 @@ import PokeDetails from './models/poke-details';
         MatAutocompleteModule,
         ReactiveFormsModule,
         MemberCardComponent,
+        EmptyCardComponent
     ],
     selector: 'poke-root',
     template: `
@@ -42,6 +44,7 @@ import PokeDetails from './models/poke-details';
                 <ng-container *ngFor="let p of team">
                     <poke-member-card [pokemon]="p" (remove)="onPokemonRemoved($event)"/>
                 </ng-container>
+                <poke-empty-card />
             </div>
         </ng-container>
     `,
