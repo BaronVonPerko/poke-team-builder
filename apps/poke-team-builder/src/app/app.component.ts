@@ -44,7 +44,6 @@ import {EmptyCardComponent} from './empty-card.component';
                 <ng-container *ngFor="let p of team">
                     <poke-member-card [pokemon]="p" (remove)="onPokemonRemoved($event)"/>
                 </ng-container>
-<!--                add an empty card for the remaining slots, up to a total of 6-->
                 <ng-container *ngFor="let _ of empty">
                     <poke-empty-card/>
                 </ng-container>
@@ -67,14 +66,17 @@ import {EmptyCardComponent} from './empty-card.component';
 })
 export class AppComponent {
     #api = inject(ApiService);
-    pokemon$: Observable<Pokemon[]> = this.#api.getOriginalPokemon().pipe(tap((results) => (this.#pokemon = results)));
+    pokemon$: Observable<Pokemon[]> = this.#api
+        .getOriginalPokemon().pipe(
+            tap((results) => (this.#pokemon = results))
+        );
     #pokemon: Pokemon[] = [];
     searchCtrl = new FormControl();
     team: Pokemon[] = [{name: 'pikachu', url: 'https://pokeapi.co/api/v2/pokemon/25/'}];
     empty = Array(5);
 
-    search = (term: string) =>
-        this.#pokemon.filter((p) => p.name.includes(term.toLowerCase()));
+    search = (term: string) => this.#pokemon.filter((p) => p.name.includes(term.toLowerCase()));
+
     options$ = this.searchCtrl.valueChanges.pipe(
         debounceTime(250),
         filter((term) => term.length > 2),
