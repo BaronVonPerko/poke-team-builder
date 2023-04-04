@@ -1,11 +1,11 @@
 import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import Pokemon from './models/pokemon';
+import Pokemon from '../models/pokemon';
 import {MatCardModule} from '@angular/material/card';
-import {ApiService} from './services/api.service';
+import {ApiService} from '../services/api.service';
 import {Observable} from 'rxjs';
-import PokeDetails from './models/poke-details';
-import {TypesPipe} from './pipes/types.pipe';
+import PokeDetails from '../models/poke-details';
+import {TypesPipe} from '../pipes/types.pipe';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 

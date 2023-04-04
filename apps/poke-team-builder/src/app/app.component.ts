@@ -8,10 +8,10 @@ import {CommonModule} from '@angular/common';
 import {ApiService} from './services/api.service';
 import {debounceTime, filter, map, switchMap} from 'rxjs';
 import Pokemon from './models/pokemon';
-import {MemberCardComponent} from './member-card.component';
+import {MemberCardComponent} from './components/member-card.component';
 import PokeDetails from './models/poke-details';
-import {EmptyCardComponent} from './empty-card.component';
-import {ShareComponent} from './share.component';
+import {EmptyCardComponent} from './components/empty-card.component';
+import {ShareComponent} from './components/share.component';
 
 @Component({
     standalone: true,

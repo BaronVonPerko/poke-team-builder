@@ -1,7 +1,7 @@
 import {Component, inject, Input} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import Pokemon from './models/pokemon';
+import Pokemon from '../models/pokemon';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 
 @Component({
