@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatInputModule} from '@angular/material/input';
@@ -34,7 +34,7 @@ import {ShareComponent} from './share.component';
 
         <mat-form-field>
             <input matInput [formControl]="searchCtrl" [matAutocomplete]="auto" placeholder="Search...">
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addToTeam($event)">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPokemon($event)">
                 <ng-container *ngIf="searchCtrl.value?.length">
                     <mat-option *ngFor="let option of options$ | async" [value]="option">
                         {{option.name | titlecase}}
@@ -52,7 +52,7 @@ import {ShareComponent} from './share.component';
             </ng-container>
         </div>
 
-        <poke-share [team]="team" />
+        <poke-share [team]="team"/>
     `,
     styles: [
         `mat-form-field {
@@ -68,11 +68,21 @@ import {ShareComponent} from './share.component';
         `,
     ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     api = inject(ApiService);
     searchCtrl = new FormControl();
     team: Pokemon[] = [];
     emptySlots = Array(6);
+
+    ngOnInit() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('team')) {
+            const ids = params.get('team')?.split(',');
+            ids?.map(id => {
+                this.addToTeam({name: '', url: `https://pokeapi.co/api/v2/pokemon/${id}/`});
+            });
+        }
+    }
 
     options$ = this.searchCtrl.valueChanges.pipe(
         debounceTime(250),
@@ -82,9 +92,13 @@ export class AppComponent {
         map((results) => results.slice(0, 3))
     );
 
-    addToTeam(selected: MatAutocompleteSelectedEvent) {
-        this.team.push(selected.option.value);
+    selectPokemon(selected: MatAutocompleteSelectedEvent) {
+        this.addToTeam(selected.option.value);
         this.searchCtrl.setValue('');
+    }
+
+    private addToTeam(pokemon: Pokemon) {
+        this.team.push(pokemon);
         this.emptySlots = Array(6 - this.team.length);
     }
 
