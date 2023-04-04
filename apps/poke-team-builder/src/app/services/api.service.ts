@@ -23,6 +23,14 @@ export class ApiService {
             )
     };
 
+    search(term: string) {
+        return this.getOriginalPokemon().pipe(
+            map((results) =>
+                results.filter((p) => p.name.includes(term.toLowerCase()))
+            )
+        );
+    }
+
     getDetails(url: string) {
         return this.#http.get<PokeDetails>(url);
     }
