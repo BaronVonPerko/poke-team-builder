@@ -52,7 +52,7 @@ import {ShareComponent} from './share.component';
             </ng-container>
         </div>
 
-        <poke-share />
+        <poke-share [team]="team" />
     `,
     styles: [
         `mat-form-field {
