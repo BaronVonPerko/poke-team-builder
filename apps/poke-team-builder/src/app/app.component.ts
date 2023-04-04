@@ -11,18 +11,20 @@ import Pokemon from './models/pokemon';
 import {MemberCardComponent} from './member-card.component';
 import PokeDetails from './models/poke-details';
 import {EmptyCardComponent} from './empty-card.component';
+import {ShareComponent} from './share.component';
 
 @Component({
     standalone: true,
     imports: [
         CommonModule,
-        MatButtonModule,
-        MatToolbarModule,
-        MatInputModule,
+        EmptyCardComponent,
         MatAutocompleteModule,
-        ReactiveFormsModule,
+        MatButtonModule,
+        MatInputModule,
+        MatToolbarModule,
         MemberCardComponent,
-        EmptyCardComponent
+        ReactiveFormsModule,
+        ShareComponent,
     ],
     selector: 'poke-root',
     template: `
@@ -49,6 +51,8 @@ import {EmptyCardComponent} from './empty-card.component';
                 <poke-empty-card/>
             </ng-container>
         </div>
+
+        <poke-share />
     `,
     styles: [
         `mat-form-field {
