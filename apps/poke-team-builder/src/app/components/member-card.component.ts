@@ -1,10 +1,7 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import Pokemon from '../models/pokemon';
 import {MatCardModule} from '@angular/material/card';
-import {ApiService} from '../services/api.service';
-import {Observable} from 'rxjs';
-import PokeDetails from '../models/poke-details';
+import Pokemon from '../models/pokemon';
 import {TypesPipe} from '../pipes/types.pipe';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -14,19 +11,19 @@ import {MatIconModule} from '@angular/material/icon';
     standalone: true,
     imports: [CommonModule, MatCardModule, MatIconModule, TypesPipe, MatButtonModule],
     template: `
-        <mat-card *ngIf="details$ | async; let details">
+        <mat-card *ngIf="pokemon">
             <mat-card-header>
                 <mat-card-title>
-                        <span class="grey">{{details.id}}</span>
-                        <span>{{details.name | titlecase}}</span>
+                        <span class="grey">{{pokemon.id}}</span>
+                        <span>{{pokemon.name | titlecase}}</span>
                 </mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <img [src]="details.sprites.front_default" [alt]="details.name"/>
-                <p class="grey">{{details | types | uppercase}}</p>
+                <img [src]="pokemon.sprites.front_default" [alt]="pokemon.name"/>
+                <p class="grey">{{pokemon | types | uppercase}}</p>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-icon-button color="accent" (click)="remove.emit(details)">
+                <button mat-icon-button color="accent" (click)="remove.emit(pokemon.id)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </mat-card-actions>
@@ -43,7 +40,7 @@ import {MatIconModule} from '@angular/material/icon';
                 justify-content: center;
             }
             mat-card-content img {
-                width: 80%;
+                width: 60%;
             }
             .grey {
                 color: #aaa
@@ -57,10 +54,6 @@ import {MatIconModule} from '@angular/material/icon';
     ],
 })
 export class MemberCardComponent {
-    #api = inject(ApiService);
-    @Input() set pokemon(pokemon: Pokemon) {
-        this.details$ = this.#api.getDetails(pokemon.url);
-    }
-    @Output() remove = new EventEmitter<PokeDetails>();
-    details$: Observable<PokeDetails> |null = null;
+    @Input() pokemon!: Pokemon;
+    @Output() remove = new EventEmitter<number>();
 }

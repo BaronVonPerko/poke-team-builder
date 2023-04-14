@@ -1,20 +1,20 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import Pokemon from '../models/pokemon';
+import BasicPokemon from '../models/basicPokemon';
 import {map, of, tap} from 'rxjs';
-import PokeDetails from '../models/poke-details';
+import Pokemon from '../models/pokemon';
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
     #http = inject(HttpClient);
-    #pokemon: Pokemon[] = [];
+    #pokemon: BasicPokemon[] = [];
 
     getOriginalPokemon = () => {
         if (this.#pokemon.length) {
             return of(this.#pokemon);
         }
         return this.#http
-            .get<{ results: Pokemon[] }>(
+            .get<{ results: BasicPokemon[] }>(
                 'https://pokeapi.co/api/v2/pokemon?limit=151'
             )
             .pipe(
@@ -27,12 +27,12 @@ export class ApiService {
         return this.getOriginalPokemon().pipe(
             map((results) =>
                 results.filter((p) => p.name.includes(term.toLowerCase()))
-            )
+            ),
         );
     }
 
     getDetails(url: string) {
-        return this.#http.get<PokeDetails>(url);
+        return this.#http.get<Pokemon>(url);
     }
 
 }

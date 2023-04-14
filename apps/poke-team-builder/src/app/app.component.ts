@@ -6,12 +6,14 @@ import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/mate
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {ApiService} from './services/api.service';
-import {debounceTime, filter, map, switchMap} from 'rxjs';
-import Pokemon from './models/pokemon';
+import {switchMap} from 'rxjs';
+import BasicPokemon from './models/basicPokemon';
 import {MemberCardComponent} from './components/member-card.component';
-import PokeDetails from './models/poke-details';
+import Pokemon from './models/pokemon';
 import {EmptyCardComponent} from './components/empty-card.component';
 import {ShareComponent} from './components/share.component';
+import {filterExistingTeamMembers, limitResults, throttleInput} from './operators';
+import {getUrlFromId} from './helpers';
 
 @Component({
     standalone: true,
@@ -53,6 +55,8 @@ import {ShareComponent} from './components/share.component';
         </div>
 
         <poke-share [team]="team"/>
+        
+        <a href="https://pokeapi.co/" target="_blank" class="footer">Powered by the PokeAPI!</a>
     `,
     styles: [
         `mat-form-field {
@@ -64,6 +68,26 @@ import {ShareComponent} from './components/share.component';
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
             grid-gap: 10px;
+            height: 400px;
+            margin: 10px;
+        }
+        
+        @media (max-width: 900px) {
+            .card-wrapper {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .card-wrapper {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        
+        a.footer {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
         }
         `,
     ],
@@ -79,17 +103,28 @@ export class AppComponent implements OnInit {
         if (params.has('team')) {
             const ids = params.get('team')?.split(',');
             ids?.map(id => {
-                this.addToTeam({name: '', url: `https://pokeapi.co/api/v2/pokemon/${id}/`});
+                this.addToTeam({id: parseInt(id), name: '', url: getUrlFromId(id)});
             });
         }
     }
 
+    // options$ = this.searchCtrl.valueChanges.pipe(
+    //     debounceTime(250),
+    //     filter((term: string) => term.length >= 3),
+    //     switchMap((term: string) => this.api.search(term)),
+    //     map((results: BasicPokemon[]) => {
+    //         return results.filter((result) => {
+    //             return !this.team.find((member) => member.url === result.url)
+    //         });
+    //     }),
+    //     map((results) => results.slice(0, 3)),
+    // );
+
     options$ = this.searchCtrl.valueChanges.pipe(
-        debounceTime(250),
-        filter((term: string) => term.length > 2),
+        throttleInput(),
         switchMap((term: string) => this.api.search(term)),
-        map(results => results.filter(p => this.team.indexOf(p) === -1)),
-        map((results) => results.slice(0, 3))
+        filterExistingTeamMembers(this.team),
+        limitResults(),
     );
 
     selectPokemon(selected: MatAutocompleteSelectedEvent) {
@@ -97,13 +132,16 @@ export class AppComponent implements OnInit {
         this.searchCtrl.setValue('');
     }
 
-    private addToTeam(pokemon: Pokemon) {
-        this.team.push(pokemon);
-        this.emptySlots = Array(6 - this.team.length);
+    private addToTeam({url}: BasicPokemon) {
+        console.log(url);
+        this.api.getDetails(url).subscribe((details) => {
+            this.team.push(details);
+            this.emptySlots = Array(6 - this.team.length);
+        });
     }
 
-    onPokemonRemoved(pokemon: PokeDetails) {
-        this.team = this.team.filter(p => p.name !== pokemon.name);
+    onPokemonRemoved(id: number) {
+        this.team = this.team.filter(p => p.id !== id);
         this.emptySlots = Array(6 - this.team.length);
     }
 }

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import PokeDetails from '../models/poke-details';
+import Pokemon from '../models/pokemon';
 
 @Pipe({
   name: 'types',
@@ -7,7 +7,7 @@ import PokeDetails from '../models/poke-details';
 })
 export class TypesPipe implements PipeTransform {
 
-  transform(value: PokeDetails): string {
+  transform(value: Pokemon): string {
     const types = value.types.map(({type}) => type.name);
     return types.join(' / ');
   }

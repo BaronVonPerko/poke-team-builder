@@ -1,8 +1,8 @@
 import {Component, inject, Input} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import Pokemon from '../models/pokemon';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import Pokemon from '../models/pokemon';
 
 @Component({
   selector: 'poke-share',
@@ -20,7 +20,7 @@ export class ShareComponent {
   snackbar = inject(MatSnackBar);
 
   share() {
-    const ids = this.team.map(pokemon => pokemon.url.split('/')[6]);
+    const ids = this.team.map(({id}) => id);
     const url = `http://localhost:4200?team=${ids.join(',')}`;
     navigator.clipboard.writeText(url);
     this.snackbar.open('Copied to clipboard!', 'Close', {duration: 2000});
