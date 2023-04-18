@@ -65,14 +65,12 @@ describe('operators', () => {
             });
         });
 
-        it('should limit the input to 3 and debounce 250ms by default', async () => {
-            const obs1 = of('abc').pipe(throttleInput());
-            await expect(lastValueFrom(obs1)).resolves.toBe('abc');
+        it('should limit the input to 3', async () => {
+            const obs1 = of('cha').pipe(throttleInput({time: 0, minLength: 3}));
+            await expect(lastValueFrom(obs1)).resolves.toBe('cha');
 
-            const obs2 = of('a').pipe(throttleInput());
+            const obs2 = of('c').pipe(throttleInput({time: 0, minLength: 3}));
             await expect(lastValueFrom(obs2)).rejects.toThrow();
-
-            // todo: write tests that prove debounceTime is working
         });
     });
 });
