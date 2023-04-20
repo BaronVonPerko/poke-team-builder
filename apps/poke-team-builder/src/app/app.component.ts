@@ -12,8 +12,9 @@ import {MemberCardComponent} from './components/member-card.component';
 import Pokemon from './models/pokemon';
 import {EmptyCardComponent} from './components/empty-card.component';
 import {ShareComponent} from './components/share.component';
-import {filterExistingTeamMembers, limitResults, throttleInput} from './operators';
 import {getUrlFromId} from './helpers';
+import {limitResults, throttleInput, filterExistingTeamMembers} from '@poke-team-builder/operators';
+
 
 @Component({
     standalone: true,
