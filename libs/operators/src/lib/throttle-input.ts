@@ -1,10 +1,8 @@
-import {debounceTime, filter, Observable} from 'rxjs';
+import {debounceTime, filter, pipe} from 'rxjs';
 
 export function throttleInput({time, minLength} = {time: 250, minLength: 3}) {
-    return function(source: Observable<any>) {
-        return source.pipe(
-            debounceTime(time),
-            filter((term: string) => term.length >= minLength),
-        )
-    }
+    return pipe(
+        debounceTime<string>(time),
+        filter((term: string) => term.length >= minLength),
+    );
 }
