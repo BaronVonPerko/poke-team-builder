@@ -35,61 +35,69 @@ import {limitResults, throttleInput, filterExistingTeamMembers} from '@poke-team
             <span>Pokemon Team Builder</span>
         </mat-toolbar>
 
-        <mat-form-field>
-            <input matInput [formControl]="searchCtrl" [matAutocomplete]="auto" placeholder="Search...">
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPokemon($event)">
-                <ng-container *ngIf="searchCtrl.value?.length">
-                    <mat-option *ngFor="let option of options$ | async" [value]="option">
-                        {{option.name | titlecase}}
-                    </mat-option>
+        <div class="container">
+            <mat-form-field>
+                <input matInput [formControl]="searchCtrl" [matAutocomplete]="auto" placeholder="Search...">
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPokemon($event)">
+                    <ng-container *ngIf="searchCtrl.value?.length">
+                        <mat-option *ngFor="let option of options$ | async" [value]="option">
+                            {{option.name | titlecase}}
+                        </mat-option>
+                    </ng-container>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <div class="card-wrapper">
+                <ng-container *ngFor="let pokemon of team">
+                    <poke-member-card [pokemon]="pokemon" (remove)="onPokemonRemoved($event)"/>
                 </ng-container>
-            </mat-autocomplete>
-        </mat-form-field>
+                <ng-container *ngFor="let _ of emptySlots">
+                    <poke-empty-card/>
+                </ng-container>
+            </div>
 
-        <div class="card-wrapper">
-            <ng-container *ngFor="let pokemon of team">
-                <poke-member-card [pokemon]="pokemon" (remove)="onPokemonRemoved($event)"/>
-            </ng-container>
-            <ng-container *ngFor="let _ of emptySlots">
-                <poke-empty-card/>
-            </ng-container>
+            <poke-share [team]="team"/>
+
+            <a href="https://pokeapi.co/" target="_blank" class="footer">Powered by the PokeAPI!</a>
         </div>
-
-        <poke-share [team]="team"/>
-        
-        <a href="https://pokeapi.co/" target="_blank" class="footer">Powered by the PokeAPI!</a>
     `,
     styles: [
-        `mat-form-field {
-            width: 100%;
-        }
+        `
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+            }
 
-        .card-wrapper {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            grid-gap: 10px;
-            height: 400px;
-            margin: 10px;
-        }
-        
-        @media (max-width: 900px) {
-            .card-wrapper {
-                grid-template-columns: repeat(2, 1fr);
+            mat-form-field {
+                width: 100%;
             }
-        }
-        
-        @media (max-width: 600px) {
+
             .card-wrapper {
-                grid-template-columns: repeat(1, 1fr);
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                grid-gap: 10px;
+                height: 400px;
+                margin: 10px;
             }
-        }
-        
-        a.footer {
-            display: block;
-            text-align: center;
-            margin: 20px 0;
-        }
+
+            @media (max-width: 900px) {
+                .card-wrapper {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            @media (max-width: 600px) {
+                .card-wrapper {
+                    grid-template-columns: repeat(1, 1fr);
+                }
+            }
+
+            a.footer {
+                display: block;
+                text-align: center;
+                margin: 20px 0;
+            }
         `,
     ],
 })
