@@ -21,7 +21,7 @@ export class ShareComponent {
 
   share() {
     const ids = this.team.map(({id}) => id);
-    const url = `http://localhost:4200?team=${ids.join(',')}`;
+    const url = `${window.location.href}?team=${ids.join(',')}`;
     navigator.clipboard.writeText(url);
     this.snackbar.open('Copied to clipboard!', 'Close', {duration: 2000});
   }
