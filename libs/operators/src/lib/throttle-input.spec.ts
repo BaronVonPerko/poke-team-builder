@@ -24,12 +24,13 @@ describe('throttleInput', () => {
 
     it('should debounce the input', () => {
         scheduler.run(({cold, expectObservable}) => {
-            const source = cold('ab--c-----d', {a: 'char', b: 'charm', c: 'charma', d: 'charman'});
+            const input = {a: 'char', b: 'charm', c: 'charma', d: 'charman'};
+            const source = cold('ab--c-----d', input);
             const expected = '-------c-----d';
 
             const result = source.pipe(throttleInput({time: 3, minLength: 0}));
 
-            expectObservable(result).toBe(expected, {c: 'charma', d: 'charman'});
+            expectObservable(result).toBe(expected, input);
         });
     });
 
