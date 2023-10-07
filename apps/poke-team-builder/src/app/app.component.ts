@@ -6,14 +6,13 @@ import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/mate
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {ApiService} from './services/api.service';
-import {switchMap} from 'rxjs';
+import {debounceTime, filter, map, switchMap} from 'rxjs';
 import BasicPokemon from './models/basicPokemon';
 import {MemberCardComponent} from './components/member-card.component';
 import Pokemon from './models/pokemon';
 import {EmptyCardComponent} from './components/empty-card.component';
 import {ShareComponent} from './components/share.component';
 import {getUrlFromId} from './helpers';
-import {limitResults, throttleInput, filterExistingTeamMembers} from '@poke-team-builder/operators';
 
 
 @Component({
@@ -117,23 +116,16 @@ export class AppComponent implements OnInit {
         }
     }
 
-    // options$ = this.searchCtrl.valueChanges.pipe(
-    //     debounceTime(250),
-    //     filter((term: string) => term.length >= 3),
-    //     switchMap((term: string) => this.api.search(term)),
-    //     map((results: BasicPokemon[]) => {
-    //         return results.filter((result) => {
-    //             return !this.team.find((member) => member.url === result.url)
-    //         });
-    //     }),
-    //     map((results) => results.slice(0, 3)),
-    // );
-
     options$ = this.searchCtrl.valueChanges.pipe(
-        throttleInput(),
+        debounceTime(250),
+        filter((term: string) => term.length >= 3),
         switchMap((term: string) => this.api.search(term)),
-        filterExistingTeamMembers(this.team),
-        limitResults(),
+        map((results: BasicPokemon[]) => {
+            return results.filter((result) => {
+                return !this.team.find((member) => member.url === result.url)
+            });
+        }),
+        map((results) => results.slice(0, 3)),
     );
 
     selectPokemon(selected: MatAutocompleteSelectedEvent) {
