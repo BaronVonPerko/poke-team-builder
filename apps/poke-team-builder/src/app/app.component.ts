@@ -12,7 +12,7 @@ import {MemberCardComponent} from './components/member-card.component';
 import Pokemon from './models/pokemon';
 import {EmptyCardComponent} from './components/empty-card.component';
 import {ShareComponent} from './components/share.component';
-import {getUrlFromId} from './helpers';
+import {getIdFromUrl, getUrlFromId} from './helpers';
 
 
 @Component({
@@ -122,7 +122,7 @@ export class AppComponent implements OnInit {
         switchMap((term: string) => this.api.search(term)),
         map((results: BasicPokemon[]) => {
             return results.filter((result) => {
-                return !this.team.find((member) => member.url === result.url)
+                return !this.team.find(({id}) => id === getIdFromUrl(result.url))
             });
         }),
         map((results) => results.slice(0, 3)),
