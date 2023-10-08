@@ -1,8 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import BasicPokemon from '../models/basicPokemon';
 import {map, of, tap} from 'rxjs';
-import Pokemon from '../models/pokemon';
+import {BasicPokemon, Pokemon} from '@poke-team-builder/models';
 
 @Injectable({providedIn: 'root'})
 export class ApiService {

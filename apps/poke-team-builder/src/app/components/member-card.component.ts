@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
-import Pokemon from '../models/pokemon';
 import {TypesPipe} from '../pipes/types.pipe';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import {Pokemon} from '@poke-team-builder/models';
 
 @Component({
     selector: 'poke-member-card',

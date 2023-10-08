@@ -7,12 +7,11 @@ import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {ApiService} from './services/api.service';
 import {debounceTime, filter, map, switchMap} from 'rxjs';
-import BasicPokemon from './models/basicPokemon';
 import {MemberCardComponent} from './components/member-card.component';
-import Pokemon from './models/pokemon';
 import {EmptyCardComponent} from './components/empty-card.component';
 import {ShareComponent} from './components/share.component';
 import {getIdFromUrl, getUrlFromId} from './helpers';
+import {BasicPokemon, Pokemon} from '@poke-team-builder/models';
 
 
 @Component({
