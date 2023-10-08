@@ -10,8 +10,8 @@ import {debounceTime, filter, map, switchMap} from 'rxjs';
 import {MemberCardComponent} from './components/member-card.component';
 import {EmptyCardComponent} from './components/empty-card.component';
 import {ShareComponent} from './components/share.component';
-import {getIdFromUrl, getUrlFromId} from './helpers';
 import {BasicPokemon, Pokemon} from '@poke-team-builder/models';
+import {getIdFromUrl, getUrlFromId} from '@poke-team-builder/misc';
 
 
 @Component({

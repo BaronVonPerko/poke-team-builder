@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@poke-team-builder/misc": ["libs/misc/src/index.ts"],
       "@poke-team-builder/models": ["libs/models/src/index.ts"],
       "@poke-team-builder/operators": ["libs/operators/src/index.ts"]
     }
